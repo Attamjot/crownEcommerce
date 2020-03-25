@@ -7,7 +7,7 @@ import Homepage from '../pages/homepage/homepage.component';
 import ShopPage from '../pages/shop/shop.component';
 import SignInAndSignUp from '../pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 
-import { auth } from '../firebase/firebase.utils';
+import { auth, createUserProfileDocument } from '../firebase/firebase.utils';
 
 
 const ContactUs = () => (
@@ -32,12 +32,24 @@ class App extends Component {
   unsubscribeFromAuth = null;
   
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if(userAuth) {
+        // storing data in firestore ## function exists in firebase.utils.js
+        const userRef = await createUserProfileDocument(userAuth);
+        userRef.onSnapshot(snapshot => {
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data()
+            }
+          });
+        });
+      }
+      // equivalent of saying currentUser = null;
       this.setState({
-        currentUser: user
-      });
-      //console.log('user:', user);
-    })
+        currentUser: userAuth
+      });        
+    });
   }
 
   componentWillUnmount() {
