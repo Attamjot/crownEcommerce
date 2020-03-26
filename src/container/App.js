@@ -43,12 +43,14 @@ class App extends Component {
               ...snapshot.data()
             }
           });
+          console.log('inside State', this.state);
         });
       }
       // equivalent of saying currentUser = null;
       this.setState({
         currentUser: userAuth
-      });        
+      });
+      console.log('outside State', this.state);
     });
   }
 
