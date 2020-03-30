@@ -50,6 +50,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('App', this.props);
     const { currentUser } = this.props;
     return (
       <div>
