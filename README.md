@@ -22,4 +22,25 @@ __Library Usage__
 
   export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 ```
-**and we are done , now everytime we dispatch actions , it will be logged and you can see in the console of developer tools**
+   **and we are done , now everytime we dispatch actions , it will be logged and you can see in the console of developer tools**
+
+* How to use `reselect: `
+```javascript
+  `cart.selectors.js`
+    import { createSelector } from 'reselect';
+
+    // Input slector ( it does not use createSelector )
+    export const selectCart = state => state.cart;
+
+    // output selectors , that expects input selector's as an input
+    export const selectCartItems = createSelector(
+    [selectCart],
+    (cart) => cart.cartItems
+    );
+
+    export const selectCartItemsCount = createSelector(
+    [selectCartItems],
+    (cartItems) => cartItems
+                     .reduce((accumulatedQuantity, cartItem) => 
+                                                accumulatedQuantity + cartItem.quantity, 0);
+```
